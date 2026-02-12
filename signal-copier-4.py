@@ -59,9 +59,9 @@ except Exception as e:
     raise
 
 # -------------------- CONFIG --------------------
-API_ID = 28984715
-API_HASH = "baf41a3280e48d652b6ce5071eeaf1e2"
-PHONE = "+4550243714"
+API_ID = 
+API_HASH = ""
+PHONE = ""
 
 # Channel IDs
 KING_SMC_ID = -1001914952549          # 𝙆𝙞𝙣𝙜 𝙎𝙈𝘾 (🄿🄰🄸🄳 )
@@ -1215,4 +1215,5 @@ if __name__ == '__main__':
             break
         except Exception as e:
             print("Runtime error, restarting in 5s:", e)
+
             time.sleep(5)
