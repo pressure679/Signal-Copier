@@ -52,13 +52,18 @@ def normalize_target(target: str):
     return target
 
 
+def to_event_chat_id(entity_id: int) -> int:
+    # Telegram channel IDs are represented by Telethon as positive entity.id,
+    # while event.chat_id uses the -100... form.
+    return -1000000000000 - entity_id
+
+
 def append_channel(channel_id: int, name: str):
     existing = set()
     if CHANNELS_FILE.exists():
         for line in CHANNELS_FILE.read_text(encoding="utf-8").splitlines():
             if line.strip() and not line.lstrip().startswith("#") and "=" in line:
                 existing.add(line.split("=", 1)[0].strip())
-    # Keep the canonical Telegram -100... ID in the config file.
     if str(channel_id) in existing:
         return
     with CHANNELS_FILE.open("a", encoding="utf-8") as f:
@@ -83,11 +88,12 @@ async def run(target: str, add_name: Optional[str]):
     await client.start(phone=phone)
     try:
         entity = await client.get_entity(entity_ref)
-        channel_id = int(entity.id)
-        # Telethon returns the bare channel ID; Telegram event filters use -100... IDs.
-        if getattr(entity, "broadcast", False) or hasattr(entity, "megagroup"):
-            channel_id = -1000000000000 + channel_id
-        title = getattr(entity, "title", None) or getattr(entity, "first_name", None) or str(entity.id)
+        raw_id = int(entity.id)
+        if getattr(entity, "broadcast", False) or getattr(entity, "megagroup", False):
+            channel_id = to_event_chat_id(raw_id)
+        else:
+            channel_id = raw_id
+        title = getattr(entity, "title", None) or getattr(entity, "first_name", None) or str(raw_id)
         username = getattr(entity, "username", None)
         print(f"Name:     {title}")
         print(f"Username: @{username}" if username else "Username: (none/private)")
