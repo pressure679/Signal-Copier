@@ -1,0 +1,7 @@
+# Local credentials / Telegram sessions
+pybit-credentials.txt
+telegram-credentials.txt
+telegram-channels.txt
+*.session
+*.session-journal
+__pycache__/
