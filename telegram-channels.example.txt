@@ -1,0 +1,6 @@
+# Format: Telegram event chat ID = display name
+# The ID fetcher can add entries automatically.
+# Existing SMC Gold Expert channel:
+-1002095470635=SMC Gold Expert
+# Add the new channel with:
+# python telegram-channel-id.py @new_channel --add "New Channel"
